@@ -1,0 +1,82 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+qdict = {"x": [0, 0, 0],
+         "Birinci Çalıştırma": [1, 1, 74],
+         "İkinci Çalıştırma": [0, 2, 74],
+         "Üçüncü Çalıştırma": [0, 2, 72],
+         "Dördüncü Çalıştırma": [1, 1, 75],
+         "Beşinci Çalıştırma": [0, 1, 70]
+         }
+bubdict = {"x": [0, 0, 0],
+           "Birinci Çalıştırma": [4, 78, 1467062],
+           "İkinci Çalıştırma": [4, 74, 1113062],
+           "Üçüncü Çalıştırma": [3, 76, 1762139],
+           "Dördüncü Çalıştırma": [4, 72, 1282775],
+           "Beşinci Çalıştırma": [3, 77, 1232251]}
+insDict = {"x": [0, 0, 0],
+           "Birinci Çalıştırma": [2, 23, 52083],
+           "İkinci Çalıştırma": [2, 7, 71294],
+           "Üçüncü Çalıştırma": [2, 6, 50564],
+           "Dördüncü Çalıştırma": [3, 26, 52023],
+           "Beşinci Çalıştırma": [2, 6, 52814]}
+selDict = {"x": [0, 0, 0],
+           "Birinci Çalıştırma": [1, 41, 182318],
+           "İkinci Çalıştırma": [2, 41, 192752],
+           "Üçüncü Çalıştırma": [3, 40, 186894],
+           "Dördüncü Çalıştırma": [2, 39, 183315],
+           "Beşinci Çalıştırma": [2, 40, 188860]}
+q_df = pd.DataFrame(qdict)
+bub_df = pd.DataFrame(bubdict)
+ins_df = pd.DataFrame(insDict)
+sel_df = pd.DataFrame(selDict)
+
+q_df.set_index("x", inplace=True)
+bub_df.set_index("x", inplace=True)
+ins_df.set_index("x", inplace=True)
+sel_df.set_index("x", inplace=True)
+
+def plot_time_series(dataframes, xlabel='Zaman', ylabel='Değer', title='Zaman Serisi Grafiği', xlim=None, ylim=None):
+    df_all = pd.concat(dataframes.values(), keys=["q", "bub", "ins", "sel"])
+    for name, df in dataframes.items():
+
+        df.index = pd.to_datetime(df.iloc[:, 0], unit='ms')
+
+        df.plot(marker='o', figsize=(9, 6), label=name)
+        plt.xlabel("saniye")
+        plt.ylabel("eleman sayısı")
+        plt.title(name)
+        plt.legend(title='DataFrames')
+
+    if xlim:
+        plt.xlim(xlim)
+    if ylim:
+        plt.ylim(ylim)
+    plt.grid(True)
+    df_all.plot(kind='bar', figsize=(12, 8))
+    plt.show()
+
+
+
+dataframes = {"----Quick Sort----": q_df, "----Bubble Sort----": bub_df, "----Insertion Sort----": ins_df,
+              "----Selection Sort----": sel_df}
+dataframes1 = {"Quick Sort": q_df, "Bubble Sort": bub_df, "Insertion Sort": ins_df,
+               "Selection Sort": sel_df}
+
+
+
+def plot_multiple_dataframes1(dataframes, ylabel='Eleman sayısı', title='Algoritmaların çalışma süresi grafiği', ylim=None):
+    combined_df = pd.DataFrame()
+    for name, df in dataframes.items():     
+        for col in df.columns[1:]:
+            combined_df[f"{name}"] = df[col]
+    combined_df.plot(kind='bar')
+    plt.xlabel('')
+    plt.ylabel(ylabel)
+    plt.title(title)
+    plt.legend(title='DataFrames', loc='upper left', bbox_to_anchor=(1, 1))
+    plt.subplots_adjust(top=0.9, bottom=0.1)
+
+    plt.show()
+
+plot_multiple_dataframes1(dataframes1)
