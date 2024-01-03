@@ -36,38 +36,22 @@ bub_df.set_index("x", inplace=True)
 ins_df.set_index("x", inplace=True)
 sel_df.set_index("x", inplace=True)
 
-def plot_time_series(dataframes, xlabel='Zaman', ylabel='Değer', title='Zaman Serisi Grafiği', xlim=None, ylim=None):
-    df_all = pd.concat(dataframes.values(), keys=["q", "bub", "ins", "sel"])
+
+def time_graphics(dataframes, title='Zaman Serisi Grafiği'):
     for name, df in dataframes.items():
-
         df.index = pd.to_datetime(df.iloc[:, 0], unit='ms')
-
         df.plot(marker='o', figsize=(9, 6), label=name)
         plt.xlabel("saniye")
         plt.ylabel("eleman sayısı")
         plt.title(name)
         plt.legend(title='DataFrames')
 
-    if xlim:
-        plt.xlim(xlim)
-    if ylim:
-        plt.ylim(ylim)
-    plt.grid(True)
-    df_all.plot(kind='bar', figsize=(12, 8))
     plt.show()
 
 
-
-dataframes = {"----Quick Sort----": q_df, "----Bubble Sort----": bub_df, "----Insertion Sort----": ins_df,
-              "----Selection Sort----": sel_df}
-dataframes1 = {"Quick Sort": q_df, "Bubble Sort": bub_df, "Insertion Sort": ins_df,
-               "Selection Sort": sel_df}
-
-
-
-def plot_multiple_dataframes1(dataframes, ylabel='Eleman sayısı', title='Algoritmaların çalışma süresi grafiği', ylim=None):
+def all_dataframeGraphics(dataframes, ylabel='Eleman sayısı', title='Algoritmaların çalışma süresi grafiği'):
     combined_df = pd.DataFrame()
-    for name, df in dataframes.items():     
+    for name, df in dataframes.items():
         for col in df.columns[1:]:
             combined_df[f"{name}"] = df[col]
     combined_df.plot(kind='bar')
@@ -76,7 +60,10 @@ def plot_multiple_dataframes1(dataframes, ylabel='Eleman sayısı', title='Algor
     plt.title(title)
     plt.legend(title='DataFrames', loc='upper left', bbox_to_anchor=(1, 1))
     plt.subplots_adjust(top=0.9, bottom=0.1)
-
     plt.show()
 
-plot_multiple_dataframes1(dataframes1)
+
+dataframes1 = {"Quick Sort": q_df, "Bubble Sort": bub_df, "Insertion Sort": ins_df,
+               "Selection Sort": sel_df}
+all_dataframeGraphics(dataframes1)
+time_graphics(dataframes1)
